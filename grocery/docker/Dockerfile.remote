@@ -1,0 +1,19 @@
+FROM openjdk:8-alpine
+
+COPY /target/*bootified.jar /app.jar
+
+RUN mkdir /tmp/tstenv
+COPY /target/tstenv/kafka.client.truststore.jks /tmp/tstenv
+COPY /target/tstenv/kafka.client.keystore.jks /tmp/tstenv
+
+RUN mkdir /tmp/stgenv
+COPY /target/stgenv/kafka.client.truststore.jks /tmp/stgenv
+COPY /target/stgenv/kafka.client.keystore.jks /tmp/stgenv
+
+RUN mkdir /tmp/proenv
+COPY /target/proenv/kafka.client.truststore.jks /tmp/proenv
+COPY /target/proenv/kafka.client.keystore.jks /tmp/proenv
+
+EXPOSE 8888
+
+CMD java ${JAVA_ARGS} -jar /app.jar --spring.profiles.active="remote"
